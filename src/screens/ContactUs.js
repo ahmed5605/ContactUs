@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, View, StyleSheet, Dimensions } from 'react-native'
+import { Text, View, StyleSheet, Linking, Dimensions } from 'react-native'
 
 import email from 'react-native-email'
 
@@ -7,8 +7,6 @@ import Colors from '../style/Colors'
 import Input from '../components/Input'
 import ErrorToast from '../components/ErrorToast';
 import ContactUsButton from '../components/ContactUsButton';
-
-
 
 const width = Dimensions.get('window').width;
 
@@ -29,12 +27,10 @@ const ContactUs = () => {
                 if(userEmail){
                     if(message){
                         var messageBody = message + "\n" + "\n" + "From"  + "\n" + userName + "\n" + userEmail + "\n" + userNumber
-
-                        const to = ['info@redpositive.in']
-                        email(to, {
-                            subject: 'Message to RedPositive',
-                            body: messageBody
-                        }).catch(console.error)
+                        const sendEmailTo = 'info@redpositive.in'
+                        const subject = 'Message to RedPositive'
+                        Linking.openURL(`mailto:${sendEmailTo}?subject=${subject}&body=${messageBody}`)
+                       
                     }else{
                         console.log("Enter the Message!");
                         setErrorMsg('Enter the Message!')
@@ -89,7 +85,7 @@ const ContactUs = () => {
                 </View>
                 
             </View>
-
+           
             <View style={{position: 'absolute', width: width, alignItems: 'center', bottom: 20, }} >
                 {errorMsg ? <ErrorToast value={errorMsg} /> : null }
                 <ContactUsButton title="Contact Us" onPress={sendEmail} />
